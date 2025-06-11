@@ -1,0 +1,46 @@
+#include <Servo.h>
+
+const int button1Pin = 2;
+const int button2Pin = 3;
+const int servoPin = 9;
+
+Servo servo;
+
+void setup() {
+  pinMode(button1Pin, INPUT_PULLUP);
+  pinMode(button2Pin, INPUT_PULLUP);
+  servo.attach(servoPin);
+  servo.write(0);  // startpositie
+}
+
+void loop() {
+  bool button1Pressed = digitalRead(button1Pin) == LOW;
+  bool button2Pressed = digitalRead(button2Pin) == LOW;
+
+  if (button1Pressed && button2Pressed) {
+    servoBeweging(0, 120, 5000);   // heen in 5s
+    delay(2000);                   // wacht 2s
+    servoBeweging(120, 0, 500);    // terug in 0.5s
+  }
+  else if (button1Pressed) {
+    servoBeweging(0, 120, 5000);   // heen in 5s
+    servoBeweging(120, 0, 5000);   // terug in 5s
+  }
+  else if (button2Pressed) {
+    servoBeweging(0, 120, 500);    // heen in 0.5s
+    servoBeweging(120, 0, 500);    // terug in 0.5s
+  }
+}
+
+// Algemene servo beweging functie
+void servoBeweging(int beginHoek, int eindHoek, int tijdMs) {
+  int stap = (eindHoek > beginHoek) ? 1 : -1;
+  int stappenAantal = abs(eindHoek - beginHoek);
+  int wachtPerStap = tijdMs / stappenAantal;
+
+  for (int pos = beginHoek; pos != eindHoek; pos += stap) {
+    servo.write(pos);
+    delay(wachtPerStap);
+  }
+  servo.write(eindHoek);  // zorg ervoor dat eindpositie exact wordt bereikt
+}
