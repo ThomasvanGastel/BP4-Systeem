@@ -1,0 +1,32 @@
+int led1 = 8;
+int led2 = 10;
+int knop = 12;
+
+int knopStatus = HIGH;
+int vorigeKnopStatus = HIGH;
+int teller = 0;
+
+void setup() {
+  pinMode(led1, OUTPUT);
+  pinMode(led2, OUTPUT);
+  pinMode(knop, INPUT_PULLUP);  // interne pull-up
+}
+
+void loop() {
+  knopStatus = digitalRead(knop);
+
+  if (knopStatus == LOW && vorigeKnopStatus == HIGH) {
+    teller++;
+    delay(50);  // debounce
+  }
+
+  vorigeKnopStatus = knopStatus;
+
+  if (teller % 2 == 0) {
+    digitalWrite(led1, LOW);
+    digitalWrite(led2, HIGH);
+  } else {
+    digitalWrite(led1, HIGH);
+    digitalWrite(led2, LOW);
+  }
+}
