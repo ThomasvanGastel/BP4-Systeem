@@ -1,0 +1,32 @@
+int sensorValue = 0;
+int ledPins[] = {0, 1, 4, 10, 12, 13}; // LED pinnen
+
+void setup()
+{
+  pinMode(A0, INPUT);
+
+  // Zet alle LED-pinnen als OUTPUT
+  for (int i = 0; i < 6; i++) {
+    pinMode(ledPins[i], OUTPUT);
+  }
+}
+
+void loop()
+{
+  // Lees de sensorwaarde (tussen 0 en 1023)
+  sensorValue = analogRead(A0);
+
+  // Bereken hoeveel LEDs aan moeten (0 tot 6)
+  int ledsOn = map(sensorValue, 0, 1023, 0, 6);
+
+  // Zet de juiste hoeveelheid LEDs aan
+  for (int i = 0; i < 6; i++) {
+    if (i < ledsOn) {
+      digitalWrite(ledPins[i], HIGH); // LED aan
+    } else {
+      digitalWrite(ledPins[i], LOW);  // LED uit
+    }
+  }
+
+  delay(100); // kleine vertraging
+}
