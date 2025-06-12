@@ -1,0 +1,119 @@
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
+LiquidCrystal_I2C lcd(0x27, 16, 2); // Gebruik 0x27 of 0x3F afhankelijk van jouw LCD
+
+const int btnStartLap = 9;
+const int btnPauseReset = 10;
+
+bool running = false;
+unsigned long startTime = 0;
+unsigned long pauseOffset = 0;
+unsigned long lapTime = 0;
+
+void setup() {
+  pinMode(btnStartLap, INPUT_PULLUP);
+  pinMode(btnPauseReset, INPUT_PULLUP);
+  
+  lcd.init();
+  lcd.backlight();
+  lcd.setCursor(0, 0);
+  lcd.print("Stopwatch Ready");
+
+  delay(1000);
+  lcd.clear();
+}
+
+void loop() {
+  bool btn1 = digitalRead(btnStartLap) == LOW;
+  bool btn2 = digitalRead(btnPauseReset) == LOW;
+
+  static bool btn1Held = false;
+  static unsigned long btn1PressTime = 0;
+  static unsigned long bothPressedTime = 0;
+
+  // Beide knoppen tegelijk = reset
+  if (btn1 && btn2) {
+    if (bothPressedTime == 0) {
+      bothPressedTime = millis();
+    } else if (millis() - bothPressedTime > 200) {
+      running = false;
+      startTime = 0;
+      lapTime = 0;
+      pauseOffset = 0;
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Reset Stopwatch");
+      delay(1000);
+      lcd.clear();
+    }
+  } else {
+    bothPressedTime = 0;
+  }
+
+  // Start of Lap knop
+  if (btn1 && !btn1Held) {
+    btn1Held = true;
+    btn1PressTime = millis();
+  }
+
+  if (!btn1 && btn1Held) {
+    unsigned long pressDuration = millis() - btn1PressTime;
+    if (pressDuration >= 2000) {
+      // Lap
+      if (running) {
+        lapTime = millis() - startTime;
+        lcd.setCursor(0, 1);
+        lcd.print("Lap: ");
+        printTime(lapTime);
+      }
+    } else {
+      // Start of hervatten
+      if (!running) {
+        running = true;
+        startTime = millis() - pauseOffset;
+      }
+    }
+    btn1Held = false;
+  }
+
+  // Pauze knop
+  static bool btn2WasPressed = false;
+  if (btn2 && !btn2WasPressed) {
+    if (running) {
+      running = false;
+      pauseOffset = millis() - startTime;
+    }
+    btn2WasPressed = true;
+  }
+  if (!btn2) {
+    btn2WasPressed = false;
+  }
+
+  // Tijd bijwerken
+  if (running) {
+    lcd.setCursor(0, 0);
+    lcd.print("Time: ");
+    printTime(millis() - startTime);
+  }
+
+  delay(50); // eenvoudige debounce
+}
+
+void printTime(unsigned long timeMs) {
+  int minutes = (timeMs / 60000);
+  int seconds = (timeMs % 60000) / 1000;
+  int tenths = (timeMs % 1000) / 10;
+
+  if (minutes < 10) lcd.print("0");
+  lcd.print(minutes);
+  lcd.print(":");
+
+  if (seconds < 10) lcd.print("0");
+  lcd.print(seconds);
+  lcd.print(".");
+
+  if (tenths < 10) lcd.print("0");
+  lcd.print(tenths);
+  lcd.print(" ");
+}
