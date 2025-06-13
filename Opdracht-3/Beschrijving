@@ -1,0 +1,44 @@
+Benodigdheden:
+2 LED’s (rood & blauw)
+Deze lampjes gaan aan of uit zodat je kunt zien wat je programma doet. Bijvoorbeeld: de blauwe LED gaat aan als je op de knop drukt.
+
+3 Weerstanden
+2 van 220 ohm: zorgen ervoor dat de LED’s niet te veel stroom krijgen, anders gaan ze kapot.
+1 van 10k ohm: zit bij de knop en zorgt ervoor dat de Arduino weet wanneer de knop echt is ingedrukt. Zonder deze zou de knop soms “zomaar” iets doen.
+
+1 Drukknop (push button)
+Wanneer je de knop indrukt, verandert de status van de pin, en dat zorgt ervoor dat bijvoorbeeld een andere LED gaat branden.
+
+
+int led1 = 8;
+int led2 = 10;
+int knop = 12;
+
+int knopStatus = HIGH;
+int vorigeKnopStatus = HIGH;
+int teller = 0;
+
+void setup() {
+  pinMode(led1, OUTPUT);
+  pinMode(led2, OUTPUT);
+  pinMode(knop, INPUT_PULLUP);  // interne pull-up
+}
+
+void loop() {
+  knopStatus = digitalRead(knop);
+
+  if (knopStatus == LOW && vorigeKnopStatus == HIGH) {
+    teller++;
+    delay(50);  // debounce
+  }
+
+  vorigeKnopStatus = knopStatus;
+
+  if (teller % 2 == 0) {
+    digitalWrite(led1, LOW);
+    digitalWrite(led2, HIGH);
+  } else {
+    digitalWrite(led1, HIGH);
+    digitalWrite(led2, LOW);
+  }
+}
