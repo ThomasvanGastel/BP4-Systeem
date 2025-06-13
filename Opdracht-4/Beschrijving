@@ -11,27 +11,35 @@ Dit is een soort regelbare weerstand. Als je eraan draait, verandert de waarde d
 Het werkt een beetje als een volumeknop, maar dan voor licht.
 
 int sensorValue = 0;
-int ledPins[] = {0, 1, 4, 10, 12, 13}; // LED pinnen
+int ledPins[] = {0, 1, 4, 10, 12, 13}; // LED-pinnen op het bord
 
 void setup()
 {
-  pinMode(A0, INPUT);
+  pinMode(A0, INPUT); // A0 wordt gebruikt om de sensorwaarde in te lezen
 
-  // Zet alle LED-pinnen als OUTPUT
+  // Stel alle LED-pinnen in als uitgang
   for (int i = 0; i < 6; i++) {
     pinMode(ledPins[i], OUTPUT);
   }
 }
 
+/**
+ * Leest de analoge waarde van een sensor en zet een aantal LEDs aan
+ * op basis van de gemeten waarde.
+ *
+ * Voorbeeld: hoe hoger de waarde, hoe meer LEDs branden.
+ *
+ * @source: https://www.youtube.com/watch?v=-EDYMQ9lczA
+ */
 void loop()
 {
-  // Lees de sensorwaarde (tussen 0 en 1023)
+  // Lees de analoge waarde van pin A0 (0 - 1023)
   sensorValue = analogRead(A0);
 
-  // Bereken hoeveel LEDs aan moeten (0 tot 6)
+  // Zet de waarde om naar een getal tussen 0 en 6
   int ledsOn = map(sensorValue, 0, 1023, 0, 6);
 
-  // Zet de juiste hoeveelheid LEDs aan
+  // Schakel LEDs in of uit op basis van de omgezette waarde
   for (int i = 0; i < 6; i++) {
     if (i < ledsOn) {
       digitalWrite(ledPins[i], HIGH); // LED aan
@@ -40,5 +48,6 @@ void loop()
     }
   }
 
-  delay(100); // kleine vertraging
+  delay(100); // korte pauze om flikkeren te verminderen
 }
+
