@@ -10,43 +10,44 @@ Deze lampjes gaan aan of uit zodat je kunt zien wat je programma doet. Bijvoorbe
 Wanneer je de knop indrukt, verandert de status van de pin, en dat zorgt ervoor dat bijvoorbeeld een andere LED gaat branden.
 
 
-int led1 = 8;
-int led2 = 10;
-int knop = 12;
+int led1Pin = 8;
+int led2Pin = 10;
+int buttonPin = 12;
 
-int knopStatus = HIGH;
-int vorigeKnopStatus = HIGH;
-int drukTeller = 0;
+int buttonState = HIGH;
+int previousButtonState = HIGH;
+int pressCounter = 0;
 
 void setup() {
-  pinMode(led1, OUTPUT);
-  pinMode(led2, OUTPUT);
-  pinMode(knop, INPUT_PULLUP); // interne pull-up weerstand
+  pinMode(led1Pin, OUTPUT);
+  pinMode(led2Pin, OUTPUT);
+  pinMode(buttonPin, INPUT_PULLUP); // interne pull-up weerstand
 }
 
 /**
  * Controleert de status van de knop en wisselt tussen twee LEDs.
  *
- * @see https://www.arduino.cc/en/Tutorial/BuiltInExamples/InputPullupSerial
+ * @source: https://www.youtube.com/watch?v=PC15jBx2UxI
+ * @author Klasgenoot: Emma de Jong
  */
 void loop() {
-  knopStatus = digitalRead(knop);
+  buttonState = digitalRead(buttonPin);
 
   // Detecteert een knopdruk: alleen bij overgang van HIGH naar LOW
-  if (knopStatus == LOW && vorigeKnopStatus == HIGH) {
-    drukTeller++;         // Tel het aantal keren dat er is gedrukt
-    delay(50);            // Korte pauze om stuiteren (debounce) te voorkomen
+  if (buttonState == LOW && previousButtonState == HIGH) {
+    pressCounter++;        // Tel het aantal keren dat er is gedrukt
+    delay(50);             // Korte pauze om stuiteren (debounce) te voorkomen
   }
 
-  vorigeKnopStatus = knopStatus;
+  previousButtonState = buttonState;
 
   // Wissel de LEDs om en om aan afhankelijk van even of oneven teller
-  if (drukTeller % 2 == 0) {
-    digitalWrite(led1, LOW);   // LED1 uit
-    digitalWrite(led2, HIGH);  // LED2 aan
+  if (pressCounter % 2 == 0) {
+    digitalWrite(led1Pin, LOW);   // LED1 uit
+    digitalWrite(led2Pin, HIGH);  // LED2 aan
   } else {
-    digitalWrite(led1, HIGH);  // LED1 aan
-    digitalWrite(led2, LOW);   // LED2 uit
+    digitalWrite(led1Pin, HIGH);  // LED1 aan
+    digitalWrite(led2Pin, LOW);   // LED2 uit
   }
 }
 
