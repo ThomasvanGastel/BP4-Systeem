@@ -1,3 +1,18 @@
+Benodigdheden:
+1 LCD-scherm met I2C-module (4-pins)
+Hiermee kun je tekst weergeven, zoals een getal, temperatuur of melding.
+
+2 Drukknoppen 
+Hiermee kun je bijvoorbeeld iets op het scherm aanpassen.
+Bijvoorbeeld:
+
+Linker knop = teller omhoog
+
+Rechter knop = teller omlaag
+
+2 Weerstanden (10k ohm)
+Deze zijn aangesloten op de drukknoppen als pull-down weerstanden. Ze zorgen ervoor dat de Arduino geen "willekeurige" signalen leest wanneer je niet drukt.
+
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
