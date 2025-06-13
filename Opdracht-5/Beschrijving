@@ -1,3 +1,18 @@
+Benodigdheden:
+2 Drukknoppen
+Hiermee kun je iets starten of stoppen. In dit geval gebruik je ze om de servo naar links of rechts te laten draaien.
+Bijvoorbeeld:
+
+Linker knop = servo draait naar links
+
+Rechter knop = servo draait naar rechts
+
+2 Weerstanden (10k ohm)
+Deze zitten bij de knoppen. Ze zorgen ervoor dat de Arduino weet wanneer een knop echt is ingedrukt en voorkomt "valse signalen". Dit heet een pull-down weerstand.
+
+1 Servo motor 
+Dit is een motortje dat je precies een bepaalde hoek kunt laten draaien.
+
 #include <Servo.h>
 
 const int button1Pin = 2;
