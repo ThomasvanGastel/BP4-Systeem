@@ -8,17 +8,23 @@ Benogdigheden:
 
 Code:
 void setup() {
-  // put your setup code here, to run once:
-  pinMode(13,OUTPUT);
-  pinMode(10,OUTPUT);
+  // Stel pin 13 en 10 in als uitgang (voor de LEDs)
+  pinMode(13, OUTPUT);
+  pinMode(10, OUTPUT);
 }
 
+/**
+ * Wisselt elke 1,5 seconde tussen twee LEDs.
+ * LED op pin 13 gaat aan, daarna LED op pin 10.
+ * Een eenvoudige knipperende schakeling.
+ *
+ * @source: https://brightspace.avans.nl/d2l/le/lessons/210335/topics/1640881
 void loop() {
-  // put your main code here, to run repeatedly:
-  digitalWrite(13,HIGH);
-  digitalWrite(10,LOW);
-  delay(1500);
-  digitalWrite(13,LOW);
-  digitalWrite(10,HIGH);
-  delay(1500);
+  digitalWrite(13, HIGH);  // Zet LED op pin 13 aan
+  digitalWrite(10, LOW);   // Zet LED op pin 10 uit
+  delay(1500);             // Wacht 1,5 seconde
+
+  digitalWrite(13, LOW);   // Zet LED op pin 13 uit
+  digitalWrite(10, HIGH);  // Zet LED op pin 10 aan
+  delay(1500);             // Wacht 1,5 seconde
 }
