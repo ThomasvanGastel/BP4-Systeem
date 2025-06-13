@@ -16,7 +16,7 @@ Deze zijn aangesloten op de drukknoppen als pull-down weerstanden. Ze zorgen erv
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
-LiquidCrystal_I2C lcd(0x27, 16, 2); // Gebruik 0x27 of 0x3F afhankelijk van jouw LCD
+LiquidCrystal_I2C lcd(0x27, 16, 2); // LCD scherm met I2C-adres 0x27
 
 const int btnStartLap = 9;
 const int btnPauseReset = 10;
@@ -30,8 +30,8 @@ void setup() {
   pinMode(btnStartLap, INPUT_PULLUP);
   pinMode(btnPauseReset, INPUT_PULLUP);
   
-  lcd.init();
-  lcd.backlight();
+  lcd.init();        // LCD initialiseren
+  lcd.backlight();   // Achtergrondverlichting aan
   lcd.setCursor(0, 0);
   lcd.print("Stopwatch Ready");
 
@@ -39,6 +39,16 @@ void setup() {
   lcd.clear();
 }
 
+/**
+ * De hoofdloop leest beide knoppen uit.
+ * - Korte druk op knop 1 start of hervat de stopwatch.
+ * - Lange druk op knop 1 toont een tussenronde.
+ * - Knop 2 pauzeert de stopwatch.
+ * - Beide knoppen samen resetten de teller.
+ *
+ * @author: Jesse van Dijk
+ * @source: Gebaseerd op eigen interpretatie van debounce- en millis()gebruik.
+ */
 void loop() {
   bool btn1 = digitalRead(btnStartLap) == LOW;
   bool btn2 = digitalRead(btnPauseReset) == LOW;
@@ -47,7 +57,7 @@ void loop() {
   static unsigned long btn1PressTime = 0;
   static unsigned long bothPressedTime = 0;
 
-  // Beide knoppen tegelijk = reset
+  // Beide knoppen tegelijk = stopwatch resetten
   if (btn1 && btn2) {
     if (bothPressedTime == 0) {
       bothPressedTime = millis();
@@ -66,7 +76,7 @@ void loop() {
     bothPressedTime = 0;
   }
 
-  // Start of Lap knop
+  // Knop 1: korte of lange druk
   if (btn1 && !btn1Held) {
     btn1Held = true;
     btn1PressTime = millis();
@@ -75,7 +85,7 @@ void loop() {
   if (!btn1 && btn1Held) {
     unsigned long pressDuration = millis() - btn1PressTime;
     if (pressDuration >= 2000) {
-      // Lap
+      // Lange druk = Lap (tussenronde)
       if (running) {
         lapTime = millis() - startTime;
         lcd.setCursor(0, 1);
@@ -83,7 +93,7 @@ void loop() {
         printTime(lapTime);
       }
     } else {
-      // Start of hervatten
+      // Korte druk = Start of hervat
       if (!running) {
         running = true;
         startTime = millis() - pauseOffset;
@@ -92,7 +102,7 @@ void loop() {
     btn1Held = false;
   }
 
-  // Pauze knop
+  // Knop 2: pauze
   static bool btn2WasPressed = false;
   if (btn2 && !btn2WasPressed) {
     if (running) {
@@ -105,7 +115,7 @@ void loop() {
     btn2WasPressed = false;
   }
 
-  // Tijd bijwerken
+  // Tijd bijwerken tijdens het lopen
   if (running) {
     lcd.setCursor(0, 0);
     lcd.print("Time: ");
@@ -115,6 +125,13 @@ void loop() {
   delay(50); // eenvoudige debounce
 }
 
+/**
+ * Toont de tijd in het formaat mm:ss.tt
+ *
+ * @param timeMs De verstreken tijd in milliseconden
+ *
+ * @source: https://www.tinkercad.com/embed/2QikRgtumnX?editbtn=1 & ChatGPT
+ */
 void printTime(unsigned long timeMs) {
   int minutes = (timeMs / 60000);
   int seconds = (timeMs % 60000) / 1000;
@@ -132,3 +149,4 @@ void printTime(unsigned long timeMs) {
   lcd.print(tenths);
   lcd.print(" ");
 }
+
