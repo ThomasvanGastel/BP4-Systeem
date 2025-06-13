@@ -1,3 +1,15 @@
+Benodigdheden:
+
+6 LED’s 
+Deze lampjes laten zien hoe ver je de knop hebt gedraaid. Hoe verder je draait, hoe meer LED’s er gaan branden.
+
+6 Weerstanden (220 ohm)
+Elke LED heeft een weerstand. Die zorgt ervoor dat er niet te veel stroom naar de LED gaat, zodat hij niet kapotgaat.
+
+1 Potentiometer
+Dit is een soort regelbare weerstand. Als je eraan draait, verandert de waarde die naar de Arduino gaat. Die waarde bepaalt hoeveel LED’s er branden.
+Het werkt een beetje als een volumeknop, maar dan voor licht.
+
 int sensorValue = 0;
 int ledPins[] = {0, 1, 4, 10, 12, 13}; // LED pinnen
 
