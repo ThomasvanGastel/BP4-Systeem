@@ -22,40 +22,60 @@ const int servoPin = 9;
 Servo servo;
 
 void setup() {
-  pinMode(button1Pin, INPUT_PULLUP);
-  pinMode(button2Pin, INPUT_PULLUP);
-  servo.attach(servoPin);
-  servo.write(0);  // startpositie
+  pinMode(button1Pin, INPUT_PULLUP); // interne pull-up op knop 1
+  pinMode(button2Pin, INPUT_PULLUP); // interne pull-up op knop 2
+  servo.attach(servoPin);            // koppel de servo aan pin 9
+  servo.write(0);                    // beginstand
 }
 
+/**
+ * In de hoofdloop wordt gekeken of knop 1, knop 2, of beide tegelijk zijn ingedrukt.
+ * Afhankelijk daarvan beweegt de servo traag of snel heen en terug.
+ *
+ * @author: Klasgenoot Finn Peters
+ * @source: Eigen interpretatie op basis van https://www.arduino.cc/en/reference/servo
+ */
 void loop() {
   bool button1Pressed = digitalRead(button1Pin) == LOW;
   bool button2Pressed = digitalRead(button2Pin) == LOW;
 
   if (button1Pressed && button2Pressed) {
-    servoBeweging(0, 120, 5000);   // heen in 5s
-    delay(2000);                   // wacht 2s
-    servoBeweging(120, 0, 500);    // terug in 0.5s
+    // beide knoppen ingedrukt: langzaam heen, snel terug
+    moveServo(0, 120, 5000);
+    delay(2000);
+    moveServo(120, 0, 500);
   }
   else if (button1Pressed) {
-    servoBeweging(0, 120, 5000);   // heen in 5s
-    servoBeweging(120, 0, 5000);   // terug in 5s
+    // knop 1 alleen: langzaam heen en langzaam terug
+    moveServo(0, 120, 5000);
+    moveServo(120, 0, 5000);
   }
   else if (button2Pressed) {
-    servoBeweging(0, 120, 500);    // heen in 0.5s
-    servoBeweging(120, 0, 500);    // terug in 0.5s
+    // knop 2 alleen: snel heen en terug
+    moveServo(0, 120, 500);
+    moveServo(120, 0, 500);
   }
 }
 
-// Algemene servo beweging functie
-void servoBeweging(int beginHoek, int eindHoek, int tijdMs) {
-  int stap = (eindHoek > beginHoek) ? 1 : -1;
-  int stappenAantal = abs(eindHoek - beginHoek);
-  int wachtPerStap = tijdMs / stappenAantal;
+/**
+ * Beweegt de servo langzaam of snel van beginHoek naar eindHoek in een bepaalde tijd.
+ *
+ * @param beginAngle  De startpositie van de servo (in graden)
+ * @param endAngle    De eindpositie van de servo (in graden)
+ * @param durationMs  Tijd in milliseconden om de beweging uit te voeren
+ *
+ * 
+ * @source: https://www.tinkercad.com/things/6X8yGzdg79i- & ChatGPT
+ */
+void moveServo(int beginAngle, int endAngle, int durationMs) {
+  int step = (endAngle > beginAngle) ? 1 : -1;
+  int totalSteps = abs(endAngle - beginAngle);
+  int delayPerStep = durationMs / totalSteps;
 
-  for (int pos = beginHoek; pos != eindHoek; pos += stap) {
+  for (int pos = beginAngle; pos != endAngle; pos += step) {
     servo.write(pos);
-    delay(wachtPerStap);
+    delay(delayPerStep);
   }
-  servo.write(eindHoek);  // zorg ervoor dat eindpositie exact wordt bereikt
+  servo.write(endAngle); // zorg dat hij exact eindigt
 }
+
