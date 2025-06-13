@@ -16,29 +16,37 @@ int knop = 12;
 
 int knopStatus = HIGH;
 int vorigeKnopStatus = HIGH;
-int teller = 0;
+int drukTeller = 0;
 
 void setup() {
   pinMode(led1, OUTPUT);
   pinMode(led2, OUTPUT);
-  pinMode(knop, INPUT_PULLUP);  // interne pull-up
+  pinMode(knop, INPUT_PULLUP); // interne pull-up weerstand
 }
 
+/**
+ * Controleert de status van de knop en wisselt tussen twee LEDs.
+ *
+ * @see https://www.arduino.cc/en/Tutorial/BuiltInExamples/InputPullupSerial
+ */
 void loop() {
   knopStatus = digitalRead(knop);
 
+  // Detecteert een knopdruk: alleen bij overgang van HIGH naar LOW
   if (knopStatus == LOW && vorigeKnopStatus == HIGH) {
-    teller++;
-    delay(50);  // debounce
+    drukTeller++;         // Tel het aantal keren dat er is gedrukt
+    delay(50);            // Korte pauze om stuiteren (debounce) te voorkomen
   }
 
   vorigeKnopStatus = knopStatus;
 
-  if (teller % 2 == 0) {
-    digitalWrite(led1, LOW);
-    digitalWrite(led2, HIGH);
+  // Wissel de LEDs om en om aan afhankelijk van even of oneven teller
+  if (drukTeller % 2 == 0) {
+    digitalWrite(led1, LOW);   // LED1 uit
+    digitalWrite(led2, HIGH);  // LED2 aan
   } else {
-    digitalWrite(led1, HIGH);
-    digitalWrite(led2, LOW);
+    digitalWrite(led1, HIGH);  // LED1 aan
+    digitalWrite(led2, LOW);   // LED2 uit
   }
 }
+
