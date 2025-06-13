@@ -6,66 +6,85 @@ Benogdigheden:
 
 code:
 void setup() {
-  // put your setup code here, to run once:
-  pinMode(13,OUTPUT);
-  pinMode(12,OUTPUT);
-  pinMode(10,OUTPUT);
-  pinMode(6,OUTPUT);
-  pinMode(4,OUTPUT);
-  pinMode(2,OUTPUT);
-  pinMode(1,OUTPUT);
-  pinMode(0,OUTPUT);
+  // Stel alle LED-pinnen in als OUTPUT
+  pinMode(13, OUTPUT);
+  pinMode(12, OUTPUT);
+  pinMode(10, OUTPUT);
+  pinMode(6, OUTPUT);
+  pinMode(4, OUTPUT);
+  pinMode(2, OUTPUT);
+  pinMode(1, OUTPUT);
+  pinMode(0, OUTPUT);
 }
 
+/**
+ * Laat LEDs één voor één aan gaan van links naar rechts en terug.
+ *
+ * @source: https://brightspace.avans.nl/d2l/le/lessons/210335/topics/1640881
+ */
 void loop() {
-  // put your main code here, to run repeatedly:
-  digitalWrite(0,LOW);
-  digitalWrite(13,HIGH);
+  // Loop van links naar rechts
+  digitalWrite(0, LOW);       // Zet eerste LED uit als voorbereiding
+  digitalWrite(13, HIGH);
   delay(150);
-  digitalWrite(13,LOW);
-  digitalWrite(12,HIGH);
-  delay(150);
-  digitalWrite(12,LOW);
-  digitalWrite(10,HIGH);
-  delay(150);
-  digitalWrite(10,LOW);
-  digitalWrite(6,HIGH);
-  delay(150);
-  digitalWrite(6,LOW);
-  digitalWrite(4,HIGH);
-  delay(150);
-  digitalWrite(4,LOW);
-  digitalWrite(2,HIGH);
-  delay(150);
-  digitalWrite(2,LOW);
-  digitalWrite(1,HIGH);
-  delay(150);
-  digitalWrite(1,LOW);
-  digitalWrite(0,HIGH);
-  delay(150);
-  digitalWrite(0,LOW);
-  digitalWrite(1,HIGH);
-  delay(150);
-  digitalWrite(1,LOW);
-  digitalWrite(2,HIGH);
-  delay(150);
-  digitalWrite(2,LOW);
-  digitalWrite(4,HIGH);
-  delay(150);
-  digitalWrite(4,LOW);
-  digitalWrite(6,HIGH);
-  delay(150);
-  digitalWrite(6,LOW);
-  digitalWrite(10,HIGH);
-  delay(150);
-  digitalWrite(10,LOW);
-  digitalWrite(12,HIGH);
-  delay(150);
-  digitalWrite(12,LOW);
-  digitalWrite(13,HIGH);
-  delay(150);
- 
+  digitalWrite(13, LOW);
   
+  digitalWrite(12, HIGH);
+  delay(150);
+  digitalWrite(12, LOW);
   
+  digitalWrite(10, HIGH);
+  delay(150);
+  digitalWrite(10, LOW);
+  
+  digitalWrite(6, HIGH);
+  delay(150);
+  digitalWrite(6, LOW);
+  
+  digitalWrite(4, HIGH);
+  delay(150);
+  digitalWrite(4, LOW);
+  
+  digitalWrite(2, HIGH);
+  delay(150);
+  digitalWrite(2, LOW);
+  
+  digitalWrite(1, HIGH);
+  delay(150);
+  digitalWrite(1, LOW);
+  
+  digitalWrite(0, HIGH);
+  delay(150);
+  digitalWrite(0, LOW);
+
+  // Loop terug van rechts naar links
+  digitalWrite(1, HIGH);
+  delay(150);
+  digitalWrite(1, LOW);
+  
+  digitalWrite(2, HIGH);
+  delay(150);
+  digitalWrite(2, LOW);
+  
+  digitalWrite(4, HIGH);
+  delay(150);
+  digitalWrite(4, LOW);
+  
+  digitalWrite(6, HIGH);
+  delay(150);
+  digitalWrite(6, LOW);
+  
+  digitalWrite(10, HIGH);
+  delay(150);
+  digitalWrite(10, LOW);
+  
+  digitalWrite(12, HIGH);
+  delay(150);
+  digitalWrite(12, LOW);
+  
+  digitalWrite(13, HIGH);
+  delay(150);
+  digitalWrite(13, LOW);
 }
+
 
